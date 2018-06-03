@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "CoinTrendsChallenge";
+}
+
+<div class="jumbotron">
+    <h1>CoinTrendsChallenge</h1>
+    <p class="lead">CoinTrendsChallenge Web applications using HTML, CSS, CanvasJS, C# and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+
+    <img src="@Url.Action("MyChart")" alt="SingleLineChart" />
+
+</div>
+
+
+ <div class="row">
+
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+</div>
+
+
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer",
+                {
+                    theme: "theme2", // light2 theme2
+
+                    zoomEnabled: true,
+                    animationEnabled: true,
+                    title: {
+                        text: "Average coin price (BTCUSD, ETHUSD, LTCUSD)"
+                    },
+
+                    axisX: {
+                      //  valueFormatString: "####-##-##"
+                      //  labelFormatter: function (e)
+                      // { return CanvasJS.formatDate( e.value, "DD MMM"); },
+                        //  labelAngle: -20
+                        title: "Date",
+                        valueFormatString: "D MMM",
+                        interval:1,
+                     //   intervalType: "day"
+                    },
+
+                    axisY: {
+                        title: "Average price",
+                        logarithmic: true,
+                        includeZero: false,
+                    },
+
+                    data: [
+                    {
+                        //  xValueFormatString: "Year ####",
+                        name: "BTCUSD",
+                        showInLegend: true,
+                        xValueType: "dateTime",
+                        type: "line", //change type to bar, line, area, pie, etc
+                        dataPoints: @Html.Raw(ViewBag.DataPoints) },
+                    {
+                        name: "ETHUSD",
+                        showInLegend: true,
+                        xValueType: "dateTime",
+                        type: "line",
+                        dataPoints: @Html.Raw(ViewBag.DataPoints2) },
+                    {
+                        name: "LTCUSD",
+                        showInLegend: true,
+                        xValueType: "dateTime",
+                        type: "line",
+                        dataPoints: @Html.Raw(ViewBag.DataPoints3) }
+                    ],
+
+                    legend: {
+                        cursor: "pointer",
+                        itemclick: function (e) {
+                            if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                                e.dataSeries.visible = false;
+                            }
+                            else {
+                                e.dataSeries.visible = true;
+                            }
+                            chart.render();
+                        }
+                    }
+
+                });
+            chart.render();
+        }
+    </script>
+
+
+
